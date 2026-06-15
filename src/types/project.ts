@@ -29,6 +29,7 @@ export type StepInput = {
   id: ProjectField;
   label: string;
   placeholder: string;
+  options?: string[];
   multiline?: boolean;
   maxLength?: number;
   required?: boolean;

@@ -2,19 +2,30 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
+  Bot,
   Check,
+  CheckSquare,
   ChevronLeft,
   ChevronRight,
   Clipboard,
+  Database,
   Download,
   FilePlus,
+  FileText,
   FolderOpen,
   HelpCircle,
+  Lightbulb,
+  Link,
+  Monitor,
+  PanelTop,
   RotateCcw,
   Save,
+  Search,
+  Users,
 } from "lucide-react";
 import {
   createDevelopmentPrompt,
+  createStepPrompt,
   getStepCompletion,
 } from "@/lib/promptTemplates";
 import { clearProject, loadProject, saveProject } from "@/lib/projectStorage";
@@ -24,11 +35,42 @@ import { Win95Button } from "@/components/win95/Win95Button";
 
 const emptyText = "아직 입력되지 않음";
 
+const iconMap = {
+  idea: Lightbulb,
+  users: Users,
+  screen: Monitor,
+  search: Search,
+  check: CheckSquare,
+  layout: PanelTop,
+  data: Database,
+  arch: Link,
+  doc: FileText,
+  deploy: Bot,
+};
+
+function addOptionValue(currentValue: string, option: string, multiline?: boolean) {
+  if (!multiline) {
+    return option;
+  }
+
+  const lines = currentValue
+    .split("\n")
+    .map((line) => line.replace(/^-\s*/, "").trim())
+    .filter(Boolean);
+
+  if (lines.includes(option)) {
+    return currentValue;
+  }
+
+  return [...lines, option].map((line) => `- ${line}`).join("\n");
+}
+
 export function VibeNavigator() {
   const [project, setProject] = useState<Project>(() => loadProject());
   const [currentStep, setCurrentStep] = useState(0);
   const [copied, setCopied] = useState(false);
   const step = steps[currentStep];
+  const StepIcon = iconMap[step.icon as keyof typeof iconMap] ?? Lightbulb;
 
   useEffect(() => {
     saveProject(project);
@@ -42,6 +84,11 @@ export function VibeNavigator() {
   const generatedPrompt = useMemo(
     () => createDevelopmentPrompt(project),
     [project],
+  );
+
+  const currentStepPrompt = useMemo(
+    () => createStepPrompt(project, currentStep),
+    [project, currentStep],
   );
 
   const keywords = useMemo(() => {
@@ -64,6 +111,14 @@ export function VibeNavigator() {
     setCopied(false);
   };
 
+  const chooseOption = (field: ProjectField, option: string, multiline?: boolean) => {
+    setProject((current) => ({
+      ...current,
+      [field]: addOptionValue(current[field], option, multiline),
+    }));
+    setCopied(false);
+  };
+
   const resetProject = () => {
     clearProject();
     setProject(emptyProject);
@@ -76,11 +131,15 @@ export function VibeNavigator() {
     setCopied(true);
   };
 
+  const copyStepPrompt = async () => {
+    await navigator.clipboard.writeText(currentStepPrompt);
+  };
+
   return (
     <main className="desktop-shell">
       <section className="window-frame" aria-label="Vibe Coding Navigator">
         <div className="title-bar">
-          <div className="app-icon" aria-hidden="true">▣</div>
+          <div className="app-icon" aria-hidden="true">VC</div>
           <span>{process.env.NEXT_PUBLIC_APP_NAME ?? "Vibe Coding Navigator"}</span>
           <div className="title-controls" aria-hidden="true">
             <span>_</span>
@@ -122,6 +181,7 @@ export function VibeNavigator() {
                 {steps.map((item, index) => {
                   const isActive = index === currentStep;
                   const isDone = getStepCompletion(project, index);
+                  const ItemIcon = iconMap[item.icon as keyof typeof iconMap] ?? Lightbulb;
 
                   return (
                     <button
@@ -131,7 +191,9 @@ export function VibeNavigator() {
                       type="button"
                     >
                       <span className="step-number">{index + 1}</span>
-                      <span className="step-icon" aria-hidden="true">{item.icon}</span>
+                      <span className="step-icon" aria-hidden="true">
+                        <ItemIcon size={18} />
+                      </span>
                       <span className="step-copy">
                         <strong>{item.shortTitle}</strong>
                       </span>
@@ -163,7 +225,9 @@ export function VibeNavigator() {
             </div>
             <div className="wizard-content">
               <header className="step-heading">
-                <span className="large-icon" aria-hidden="true">{step.icon}</span>
+                <span className="large-icon" aria-hidden="true">
+                  <StepIcon size={34} />
+                </span>
                 <div>
                   <h1>{step.title}</h1>
                   <p>{step.question}</p>
@@ -176,13 +240,29 @@ export function VibeNavigator() {
                   const count = input.maxLength ? `${value.length} / ${input.maxLength}` : null;
 
                   return (
-                    <label className="field-block" key={input.id}>
-                      <span>
+                    <div className="field-block" key={input.id}>
+                      <label htmlFor={input.id}>
                         {input.label}
                         {input.required ? <em>필수</em> : null}
-                      </span>
+                      </label>
+
+                      {input.options ? (
+                        <div className="option-list" aria-label={`${input.label} 선택지`}>
+                          {input.options.map((option) => (
+                            <button
+                              key={option}
+                              type="button"
+                              onClick={() => chooseOption(input.id, option, input.multiline)}
+                            >
+                              {option}
+                            </button>
+                          ))}
+                        </div>
+                      ) : null}
+
                       {input.multiline ? (
                         <textarea
+                          id={input.id}
                           value={value}
                           onChange={(event) => updateField(input.id, event.target.value)}
                           placeholder={input.placeholder}
@@ -191,6 +271,7 @@ export function VibeNavigator() {
                         />
                       ) : (
                         <input
+                          id={input.id}
                           value={value}
                           onChange={(event) => updateField(input.id, event.target.value)}
                           placeholder={input.placeholder}
@@ -198,7 +279,7 @@ export function VibeNavigator() {
                         />
                       )}
                       {count ? <small>{count}</small> : null}
-                    </label>
+                    </div>
                   );
                 })}
               </div>
@@ -258,6 +339,19 @@ export function VibeNavigator() {
               </div>
             </section>
 
+            <section className="panel-shell step-prompt-panel">
+              <div className="panel-title">
+                <strong>현재 단계 프롬프트</strong>
+                <span>×</span>
+              </div>
+              <div className="step-prompt-content">
+                <textarea readOnly value={currentStepPrompt} rows={9} />
+                <Win95Button icon={<Clipboard size={16} />} onClick={copyStepPrompt}>
+                  단계 프롬프트 복사
+                </Win95Button>
+              </div>
+            </section>
+
             <section className="panel-shell progress-panel">
               <div className="panel-title">
                 <strong>진행률</strong>
@@ -281,7 +375,7 @@ export function VibeNavigator() {
           <div className="prompt-heading">
             <div>
               <p className="eyebrow">Generated Output</p>
-              <h2>개발 프롬프트</h2>
+              <h2>전체 개발 프롬프트</h2>
             </div>
             <div className="prompt-actions">
               <Win95Button icon={<RotateCcw size={16} />} onClick={resetProject}>

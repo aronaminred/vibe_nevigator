@@ -48,3 +48,24 @@ ${sections}
 - README에 설치, 실행, 환경변수, 주요 기능, 배포 방법이 설명되어 있다.
 - 비밀 값은 커밋하지 않는다.`;
 }
+
+export function createStepPrompt(project: Project, stepIndex: number) {
+  const step = steps[stepIndex];
+  const inputs = step.inputs
+    .map((input) => {
+      const value = project[input.id]?.trim() || fallback;
+      return `- ${input.label}: ${value}`;
+    })
+    .join("\n");
+
+  return `현재 단계: ${step.title}
+
+목표:
+${step.question}
+
+입력 내용:
+${inputs}
+
+요청:
+위 내용을 바탕으로 이 단계의 기획을 초보자도 이해할 수 있게 정리하고, 다음 단계에서 확인해야 할 질문 2개를 제안해줘.`;
+}
