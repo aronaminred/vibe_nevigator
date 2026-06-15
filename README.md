@@ -5,7 +5,9 @@ Windows 95 스타일의 10단계 기획 Wizard입니다. 바이브 코딩을 처
 ## 주요 기능
 
 - 10단계 step-by-step 기획 입력
-- 왼쪽 단계 목록, 중앙 입력 패널, 오른쪽 실시간 요약 패널
+- 단계별 다중 입력 필드: 서비스 이름, 설명, 문제, 목표 등
+- Windows 95 데스크톱 앱 레퍼런스를 따른 메뉴바, 툴바, 패널형 레이아웃
+- 왼쪽 단계 목록과 도움말, 중앙 입력 패널, 오른쪽 실시간 요약·키워드·진행률 패널
 - LocalStorage 자동 저장 및 초기화
 - Codex/Cursor/Claude 등에 전달할 개발 프롬프트 자동 생성
 - 모바일 대응 Windows 95 스타일 UI
@@ -61,7 +63,7 @@ npm run build
 
 - 프로젝트 세팅: Next.js, TypeScript, Tailwind 구성
 - 디자인 시스템: WindowFrame, TitleBar, MenuBar, Win95Button, StatusBar 스타일 구현
-- Wizard 레이아웃: 10단계 목록, 현재 단계 입력, 요약 패널, 이전/다음 이동
+- Wizard 레이아웃: 10단계 목록, 도움말, 현재 단계 다중 입력, 요약 패널, 이전/다음 이동
 - 상태 관리: Project 객체 기반 입력값 관리
 - 저장 및 복원: LocalStorage 자동 저장
 - 프롬프트 생성: 입력값 기반 개발 프롬프트 생성 및 복사
