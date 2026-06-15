@@ -1,5 +1,7 @@
 # Vibe Coding Navigator
 
+Product strategy: [docs/product-strategy.md](docs/product-strategy.md)
+
 Windows 95 스타일의 10단계 기획 Wizard입니다. 바이브 코딩을 처음 시작하는 사용자가 서비스 아이디어를 MVP 개발 프롬프트로 정리할 수 있도록 돕습니다.
 
 ## 주요 기능
