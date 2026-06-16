@@ -74,7 +74,6 @@ function addOptionValue(currentValue: string, option: string, multiline?: boolea
 export function VibeNavigator() {
   const [project, setProject] = useState<Project>(() => loadProject());
   const [currentStep, setCurrentStep] = useState(0);
-  const [copied, setCopied] = useState(false);
   const [mode, setMode] = useState<ScreenMode>("intro");
   const [activeResultId, setActiveResultId] = useState("summary");
   const step = steps[currentStep];
@@ -126,7 +125,6 @@ export function VibeNavigator() {
 
   const updateField = (field: ProjectField, value: string) => {
     setProject((current) => ({ ...current, [field]: value }));
-    setCopied(false);
   };
 
   const chooseOption = (field: ProjectField, option: string, multiline?: boolean) => {
@@ -134,7 +132,6 @@ export function VibeNavigator() {
       ...current,
       [field]: addOptionValue(current[field], option, multiline),
     }));
-    setCopied(false);
   };
 
   const resetProject = () => {
@@ -143,7 +140,6 @@ export function VibeNavigator() {
     setCurrentStep(0);
     setActiveResultId("summary");
     setMode("intro");
-    setCopied(false);
   };
 
   const copyText = async (text: string) => {
@@ -152,7 +148,6 @@ export function VibeNavigator() {
 
   const copyPrompt = async () => {
     await copyText(generatedPrompt);
-    setCopied(true);
   };
 
   const goNext = () => {
@@ -358,26 +353,8 @@ export function VibeNavigator() {
               </aside>
             </div>
 
-            <section className="prompt-panel" aria-label="Generated prompt">
-              <div className="prompt-heading">
-                <div>
-                  <p className="eyebrow">Generated Output</p>
-                  <h2>전체 개발 프롬프트</h2>
-                </div>
-                <div className="prompt-actions">
-                  <Win95Button icon={<RotateCcw size={16} />} onClick={resetProject}>
-                    초기화
-                  </Win95Button>
-                  <Win95Button
-                    icon={<Clipboard size={16} />}
-                    onClick={copyPrompt}
-                    aria-label="Copy generated prompt"
-                  >
-                    {copied ? "복사됨" : "복사"}
-                  </Win95Button>
-                </div>
-              </div>
-              <textarea readOnly value={generatedPrompt} rows={8} />
+            <section className="wizard-ad-row">
+              <AdSlot label="진행 중 하단 광고" />
             </section>
           </>
         ) : null}

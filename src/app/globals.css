@@ -792,6 +792,10 @@ textarea:focus {
   padding: 0 14px;
 }
 
+.wizard-ad-row {
+  padding: 0 16px 14px;
+}
+
 .ad-slot {
   display: grid;
   gap: 4px;

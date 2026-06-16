@@ -5,8 +5,8 @@ type AdSlotProps = {
 export function AdSlot({ label }: AdSlotProps) {
   return (
     <aside className="ad-slot" aria-label={label}>
-      <strong>광고 자리</strong>
-      <span>결과 화면 체류 시간을 수익화할 위치입니다.</span>
+      <strong>{label}</strong>
+      <span>광고 또는 후원 콘텐츠를 배치할 수 있는 자리입니다.</span>
     </aside>
   );
 }

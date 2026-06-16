@@ -33,6 +33,7 @@
 - 전체 개발 프롬프트 생성
 - 10단계 완료 후 결과 탭 화면
 - 결과 화면 광고 슬롯 자리
+- Wizard 진행 중 하단 광고 슬롯 자리
 - 왼쪽 단계 목록과 도움말 패널
 - 오른쪽 요약, 키워드, 단계 프롬프트, 진행률 패널
 - LocalStorage 자동 저장
@@ -91,6 +92,7 @@ OPENAI_API_KEY=""
 
 ```bash
 NEXT_PUBLIC_ADSENSE_CLIENT_ID=""
+NEXT_PUBLIC_ADSENSE_SLOT_WIZARD_BOTTOM=""
 NEXT_PUBLIC_ADSENSE_SLOT_RESULT_TOP=""
 NEXT_PUBLIC_ADSENSE_SLOT_RESULT_BOTTOM=""
 ```
