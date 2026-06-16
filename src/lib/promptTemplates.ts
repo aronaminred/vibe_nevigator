@@ -35,7 +35,8 @@ export function createDevelopmentPrompt(project: Project) {
 개발 원칙:
 - Next.js App Router, TypeScript, Tailwind CSS를 사용한다.
 - Windows 95 스타일의 Wizard UI를 유지한다.
-- 10단계 입력, 좌측 단계 목록과 도움말, 우측 요약/진행률 패널, LocalStorage 자동 저장, 최종 프롬프트 복사 기능을 포함한다.
+- 초보자가 이해할 수 있는 쉬운 용어를 먼저 사용한다.
+- 10단계 입력, 추천 선택지, 단계별 도움말, 결과 탭, LocalStorage 자동 저장, 최종 프롬프트 복사 기능을 포함한다.
 - 환경변수는 .env.local에만 실제 값을 두고, 저장소에는 .env.example만 커밋한다.
 - 모바일 360px 너비에서도 입력과 버튼이 겹치지 않아야 한다.
 
