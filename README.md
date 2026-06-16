@@ -8,6 +8,8 @@
 
 자세한 기획안은 [docs/product-strategy.md](docs/product-strategy.md)를 참고하세요.
 
+상단 버튼, 이어하기, 여러 프로젝트 저장 방향은 [docs/development-v2.md](docs/development-v2.md)에 정리되어 있습니다.
+
 내일 이어서 할 일은 [TODO.md](TODO.md)에 정리되어 있습니다.
 
 ## 핵심 사용자
